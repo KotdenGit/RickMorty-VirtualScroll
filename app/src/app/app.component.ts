@@ -41,7 +41,6 @@ import { RouterOutlet } from '@angular/router';
     <header class="brand-name">
     </header>
     <section class="content">
-      <app-character></app-character>
       <router-outlet></router-outlet>
     </section>
   </main>
