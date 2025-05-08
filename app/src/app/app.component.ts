@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
+import { CharacterComponent } from './character/character.component';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, CharacterComponent],
   template: `
   <style>
     :host {
@@ -40,6 +41,7 @@ import { RouterOutlet } from '@angular/router';
     <header class="brand-name">
     </header>
     <section class="content">
+      <app-character></app-character>
       <router-outlet></router-outlet>
     </section>
   </main>
