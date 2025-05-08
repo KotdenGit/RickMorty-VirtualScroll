@@ -5,7 +5,7 @@ import { RouterOutlet } from '@angular/router';
 @Component({
   standalone: true,
   selector: 'app-root',
-  imports: [RouterOutlet, CharacterComponent],
+  imports: [RouterOutlet],
   template: `
   <style>
     :host {

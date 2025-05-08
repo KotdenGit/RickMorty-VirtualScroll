@@ -4,9 +4,12 @@ import { Component } from '@angular/core';
   selector: 'app-character',
   imports: [],
   template: `
-    <p>
-      character works!
-    </p>
+    <section>
+      <form>  
+        <input type="text" placeholder="Filter by name" #filter>
+        <button class="primary" type="button" >Search</button>
+      </form>
+    </section>
   `,
   styleUrl: './character.component.scss'
 })
