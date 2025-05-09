@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { IndividualComponent } from '../individual/individual.component';
 
 @Component({
   selector: 'app-character',
-  imports: [IndividualComponent],
+  imports: [CommonModule, IndividualComponent],
   template: `
     <section>
       <form>  
