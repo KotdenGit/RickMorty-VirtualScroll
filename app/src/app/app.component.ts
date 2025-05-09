@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { CharacterComponent } from './character/character.component';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -14,7 +13,7 @@ import { RouterOutlet } from '@angular/router';
     header {
       position: relative;
       display: block;
-      height: 100px;
+      height: 80px;
       overflow: hidden;
       padding: var(--content-padding);
       box-shadow: 0px 5px 25px var(--shadow-color);
@@ -25,10 +24,10 @@ import { RouterOutlet } from '@angular/router';
     header::before {
       content: "";
       position: absolute;
-      top: -250%; 
+      top: -280%; 
       left: -40%; 
       width: 150%;
-      height: 900%;
+      height: 1000%;
       background: url("/assets/logo.svg") repeat;
       background-size: 50px 50px;
       transform: rotate(-30deg);
