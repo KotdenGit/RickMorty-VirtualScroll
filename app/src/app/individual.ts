@@ -16,5 +16,5 @@ export interface Individual {
     image: string,
     episode: string[],
     url: string;
-    created: string;
+      created: string;
 }
