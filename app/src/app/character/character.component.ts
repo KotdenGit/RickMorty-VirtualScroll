@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IndividualComponent } from '../individual/individual.component';
+import { Individual } from '../individual';
+import { CharacterService } from '../character.service';
 
 @Component({
   selector: 'app-character',
@@ -13,11 +15,21 @@ import { IndividualComponent } from '../individual/individual.component';
       </form>
     </section>
     <section class="results">
-      <app-individual></app-individual>
+      <app-individual *ngFor="let individual of filteredNameList" [individual]="individual"></app-individual>
     </section>
   `,
   styleUrl: './character.component.scss'
 })
 export class CharacterComponent {
+  individualList: Individual[] = [];
+  filteredNameList: Individual[] = [];
+  characterService: CharacterService = inject(CharacterService);
+
+  constructor() {
+    this.characterService.getAllCharacters().then((individualList: Individual[]) => {
+      this.individualList = individualList;
+      this.filteredNameList = this.individualList;
+    });
+  }
 
 }

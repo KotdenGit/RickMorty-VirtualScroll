@@ -5,7 +5,7 @@ import { Individual } from './individual';
   providedIn: 'root'
 })
 export class CharacterService {
-  url = 'http://localhost:3000/locations';
+  url = 'http://localhost:3000/characters';
 
   constructor() { }
 
