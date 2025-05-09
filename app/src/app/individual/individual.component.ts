@@ -4,9 +4,12 @@ import { Component } from '@angular/core';
   selector: 'app-individual',
   imports: [],
   template: `
-    <p>
-      individual works!
-    </p>
+    <section class="listing">
+      <img class="listing-photo" [src]="" alt="Character photo of_" />
+      <h2 class="listing-heading">name</h2>
+      <p class="listing-description">gender, species</p>
+      <a class="button">Learn More</a>
+    </section>
   `,
   styleUrl: './individual.component.scss'
 })
