@@ -5,12 +5,11 @@ import { Individual } from './individual';
   providedIn: 'root'
 })
 export class CharacterService {
-  url = 'http://localhost:3000/characters';
-
-  constructor() { }
+  url = 'https://rickandmortyapi.com/api/character';
 
   async getAllCharacters(): Promise<Individual[]> {
-    const data = await fetch(this.url);
-    return await data.json() ?? []; 
+    const response = await fetch(this.url);
+    const data = await response.json();
+    return data.results ?? [];
   }
 }
