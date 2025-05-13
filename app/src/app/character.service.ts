@@ -7,6 +7,7 @@ import { Individual } from './individual';
 export class CharacterService {
   private url = 'https://rickandmortyapi.com/api/character';
   private characters = signal<Individual[]>([]);
+  private searchResults = signal<Individual[]>([]);
 
   async getAllCharacters(): Promise<void> {
     try {
@@ -18,7 +19,22 @@ export class CharacterService {
     }
   }
 
+  async searchCharacters(name: string): Promise<void> {
+    try {
+      const response = await fetch(`${this.url}/?name=${encodeURIComponent(name)}`);
+      const data = await response.json();
+      this.searchResults.set(data.results ?? []);
+      console.log(this.searchResults());
+    } catch (error) {
+      console.error('Ошибка при поиске персонажей:', error);
+    }
+  }
+
   getCharacters() {
     return this.characters.asReadonly();
+  }
+
+  getSearchResults() {
+    return this.searchResults.asReadonly();
   }
 }
