@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IndividualComponent } from '../individual/individual.component';
 import { Individual } from '../individual';
@@ -24,12 +24,20 @@ export class CharacterComponent {
   individualList: Individual[] = [];
   filteredNameList: Individual[] = [];
   characterService: CharacterService = inject(CharacterService);
+  charactersSignal: Signal<Individual[]>;
 
   constructor() {
-    this.characterService.getAllCharacters().then((individualList: Individual[]) => {
-      this.individualList = individualList;
+    this.charactersSignal = this.characterService.getCharacters(); 
+    // Получаем сигнал
+
+    // Эффект для автоматического обновления individualList при изменении данных
+    effect(() => {
+      this.individualList = this.charactersSignal();
       this.filteredNameList = this.individualList;
     });
   }
 
+  ngOnInit(): void {
+    this.characterService.getAllCharacters();
+  }
 }

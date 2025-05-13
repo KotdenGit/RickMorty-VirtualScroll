@@ -1,15 +1,24 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Individual } from './individual';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CharacterService {
-  url = 'https://rickandmortyapi.com/api/character';
+  private url = 'https://rickandmortyapi.com/api/character';
+  private characters = signal<Individual[]>([]);
 
-  async getAllCharacters(): Promise<Individual[]> {
-    const response = await fetch(this.url);
-    const data = await response.json();
-    return data.results ?? [];
+  async getAllCharacters(): Promise<void> {
+    try {
+      const response = await fetch(this.url);
+      const data = await response.json();
+      this.characters.set(data.results ?? []);
+    } catch (error) {
+      console.error('Ошибка при получении персонажей:', error);
+    }
+  }
+
+  getCharacters() {
+    return this.characters.asReadonly();
   }
 }
