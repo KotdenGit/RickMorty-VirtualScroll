@@ -1,16 +1,25 @@
-import { Component, effect, inject, Signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { IndividualComponent } from '../individual/individual.component';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { Individual } from '../individual';
 import { CharacterService } from '../character.service';
 
 @Component({
+  selector: 'app-character',
   imports: [CommonModule, FormsModule, IndividualComponent],
   template: `
     <section>
-      <form>  
-        <input type="text" placeholder="Filter by name" [(ngModel)]="searchQuery" name="filter" [ngModelOptions]="{standalone: true}"/>
+      <form>
+        <input
+          type="text"
+          placeholder="Filter by name"
+          [(ngModel)]="searchQuery"
+          name="filter"
+          [ngModelOptions]="{ standalone: true }"
+        />
         <button class="primary" type="button" (click)="search()">Search</button>
       </form>
     </section>
@@ -18,39 +27,51 @@ import { CharacterService } from '../character.service';
       <app-individual *ngFor="let individual of filteredNameList" [individual]="individual"></app-individual>
     </section>
   `,
-  styleUrl: './character.component.scss'
+  styleUrls: ['./character.component.scss'],
 })
-export class CharacterComponent {
-  individualList: Individual[] = [];
-  filteredNameList: Individual[] = [];
+export class CharacterComponent implements OnInit {
   searchQuery = '';
-  characterService: CharacterService = inject(CharacterService);
-  charactersSignal: Signal<Individual[]>;
-  searchResultsSignal: Signal<Individual[]>;
+  characters: Individual[] = [];
+  searchResults: Individual[] = [];
+  filteredNameList: Individual[] = [];
 
-  constructor() {
-    this.charactersSignal = this.characterService.getCharacters();
-    this.searchResultsSignal = this.characterService.getSearchResults(); 
-    // Получаем сигнал
-
-    // Эффект, обновляющий список персонажей (обычный или после поиска)
-    effect(() => {
-      this.filteredNameList = this.searchQuery 
-        ? this.searchResultsSignal() 
-        : this.charactersSignal();
-    });
-  }
+  constructor(private characterService: CharacterService) {}
 
   ngOnInit(): void {
-    this.characterService.getAllCharacters();
+    this.loadAllCharacters();
   }
 
-  search(): void {
+  async loadAllCharacters(): Promise<void> {
+    this.characters = await this.characterService.getAllCharacters();
+    this.updateFilteredList();
+  }
+
+  async search(): Promise<void> {
     if (this.searchQuery.trim()) {
-      this.characterService.searchCharacters(this.searchQuery);
-      //console.log(this.searchResultsSignal());
+      this.searchResults = await this.characterService.searchCharacters(this.searchQuery);
     } else {
-      this.characterService.getAllCharacters();
+      this.searchResults = [];
+      await this.loadAllCharacters();
     }
+    this.updateFilteredList();
+  }
+
+  updateFilteredList(): void {
+    const searchQueryLower = this.searchQuery.toLowerCase();
+    const sourceList = this.searchResults.length > 0 ? this.searchResults : this.characters;
+    this.filteredNameList = sourceList.filter((individual) =>
+      individual.name.toLowerCase().includes(searchQueryLower)
+    );
   }
 }
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    FormsModule,
+    IndividualComponent,
+    CharacterComponent
+  ],
+})
+export class AppModule { }
+

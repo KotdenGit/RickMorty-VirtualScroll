@@ -1,40 +1,43 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Individual } from './individual';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CharacterService {
   private url = 'https://rickandmortyapi.com/api/character';
-  private characters = signal<Individual[]>([]);
-  private searchResults = signal<Individual[]>([]);
+  private characters: Individual[] = [];
+  private searchResults: Individual[] = [];
 
-  async getAllCharacters(): Promise<void> {
+  async getAllCharacters(): Promise<Individual[]> {
     try {
       const response = await fetch(this.url);
       const data = await response.json();
-      this.characters.set(data.results ?? []);
+      this.characters = data.results ?? [];
+      return this.characters;
     } catch (error) {
       console.error('Ошибка при получении персонажей:', error);
+      return [];
     }
   }
 
-  async searchCharacters(name: string): Promise<void> {
+  async searchCharacters(name: string): Promise<Individual[]> {
     try {
       const response = await fetch(`${this.url}/?name=${encodeURIComponent(name)}`);
       const data = await response.json();
-      this.searchResults.set(data.results ?? []);
-      console.log(this.searchResults());
+      this.searchResults = data.results ?? [];
+      return this.searchResults;
     } catch (error) {
       console.error('Ошибка при поиске персонажей:', error);
+      return [];
     }
   }
 
-  getCharacters() {
-    return this.characters.asReadonly();
+  getCharacters(): Individual[] {
+    return this.characters;
   }
 
-  getSearchResults() {
-    return this.searchResults.asReadonly();
+  getSearchResults(): Individual[] {
+    return this.searchResults;
   }
 }
